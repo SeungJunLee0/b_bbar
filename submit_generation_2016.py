@@ -69,7 +69,7 @@ def get_shell_script(dataset_name, nEvents, fragment_path, job_id):
     script=''
     script+=f'''#!/bin/bash
 
-source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env.sh
+#source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env.sh
 
 # Dump all code into 'MC_Generation_Script_{job_id}.sh'
 cat <<'EndOfMCGenerationFile' > MC_Generation_Script_{job_id}.sh
