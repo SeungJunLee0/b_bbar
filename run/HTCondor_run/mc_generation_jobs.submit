@@ -1,0 +1,9 @@
++RequestRuntime       = 85000
+RequestMemory         = 2000
+universe              = vanilla
+executable            = /afs/cern.ch/user/s/seungjun/private/b_bbar/run/HTCondor_run/mc_generation_job_$(ProcId).sh
+output                = /afs/cern.ch/user/s/seungjun/private/b_bbar/run/HTCondor_run/mc_generation_job_$(ProcId).out
+error                 = /afs/cern.ch/user/s/seungjun/private/b_bbar/run/HTCondor_run/mc_generation_job_$(ProcId).err
+log                   = /afs/cern.ch/user/s/seungjun/private/b_bbar/run/HTCondor_run/mc_generation_job_$(ProcId).log
+transfer_executable   = True
+queue 1
