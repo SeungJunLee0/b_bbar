@@ -37,9 +37,9 @@ generator = cms.EDFilter("Pythia8HadronizerFilter",
                          PythiaParameters = cms.PSet(
                               pythia8CommonSettingsBlock,
                               pythia8CP5SettingsBlock,
-							  pythia8PowhegEmissionVetoSettingsBlock,
+                              pythia8PowhegEmissionVetoSettingsBlock,
                               pythia8PSweightsSettingsBlock,
-							  processParameters = cms.vstring(
+                              processParameters = cms.vstring(
 								          'POWHEG:nFinal = 2', ## Number of final state particles
 										          ## (BEFORE THE DECAYS) in the LHE
 										          ## other than emitted extra parton
@@ -346,7 +346,8 @@ def main():
         os.system(f"rm -rf {fragment_dir}/*")
     
     gridpack_dict = {
-    'tLepWLepZinvLO-madgraph-mcatnlo-pythia8':'/nfs/dust/cms/user/stafford/tWZ_gen/slc6_gen_prod/genproductions/bin/MadGraph5_aMCatNLO/tLepWLepZinvLO_slc6_amd64_gcc700_CMSSW_10_2_24_patch1_tarball.tar.xz',
+    'tLepWLepZinvLO-madgraph-mcatnlo-pythia8':'/afs/cern.ch/user/s/seungjun/private/lhe_product/pwgevents-0001.lhe',
+    #'tLepWLepZinvLO-madgraph-mcatnlo-pythia8':'/nfs/dust/cms/user/stafford/tWZ_gen/slc6_gen_prod/genproductions/bin/MadGraph5_aMCatNLO/tLepWLepZinvLO_slc6_amd64_gcc700_CMSSW_10_2_24_patch1_tarball.tar.xz',
     }
     job_id=0
     for dataset in gridpack_dict.keys():
