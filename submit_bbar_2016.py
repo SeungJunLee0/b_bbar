@@ -99,12 +99,11 @@ eval `scram runtime -sh`
 cp {fragment_path} Configuration/GenProduction/python/PY8_fragment.py
 scram b
 cd ../..
-cmsDriver.py  --python_filename TOP-RunIISummer20UL18SIM-00002_1_cfg.py --eventcontent RAWSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM --fileout file:TOP-RunIISummer20UL18SIM-00002.root --conditions 106X_upgrade2018_realistic_v11_L1v1 --beamspot Realistic25ns13TeVEarly2018Collision --step SIM --geometry DB:Extended --filein file:TOP-RunIISummer20UL18wmLHEGEN-00002.root --era Run2_2018 --runUnscheduled --no_exec --mc -n $EVENTS || exit $? ;
 
 cmsDriver.py Configuration/GenProduction/python/PY8_fragment.py --python_filename GEN-SIM_cfg.py \\
              --eventcontent RAWSIM,LHE --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1,Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM,LHE \\
              --fileout file:GEN-SIM.root \\
-             --conditions MCRUN2_71_V1::All --beamspot Realistic50ns13TeVCollision \\
+             --conditions   106X_upgrade2018_realistic_v11_L1v1 --beamspot Realistic25ns13TeVEarly2018Collision \\
              --customise_commands process.source.numberEventsInLuminosityBlock="cms.untracked.uint32(100)"\\\\n\
 process.RandomNumberGeneratorService.externalLHEProducer.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.generator.initialSeed="int({int(random.random()*100000)})"\\\\n\
@@ -122,22 +121,23 @@ process.RandomNumberGeneratorService.simMuonRPCDigis.initialSeed="int({int(rando
 cmsRun GEN-SIM_cfg.py || exit $? ;
 
 ### PREMIX step ###
-export SCRAM_ARCH=slc6_amd64_gcc530
+export SCRAM_ARCH=slc7_amd64_gcc700
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-if [ -r CMSSW_8_0_31/src ] ; then
-  echo release CMSSW_8_0_31 already exists
+if [ -r CMSSW_10_6_17_patch1/src ] ; then
+  echo release CMSSW_10_6_17_patch1 already exists
 else
-  scram p CMSSW CMSSW_8_0_31
+  scram p CMSSW CMSSW_10_6_17_patch1
 fi
-cd CMSSW_8_0_31/src
+cd CMSSW_10_6_17_patch1/src
 eval `scram runtime -sh`
+
 scram b
 cd ../..
 cmsDriver.py --python_filename PREMIX_cfg.py \\
              --eventcontent PREMIXRAW --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM-RAW \\
              --filein file:GEN-SIM.root --fileout file:PREMIX.root \\
-             --pileup_input "dbs:/Neutrino_E-10_gun/RunIISpring15PrePremix-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v2-v2/GEN-SIM-DIGI-RAW" \\
-             --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 \\
+             --pileup_input "dbs:/Neutrino_E-10_gun/RunIISummer20ULPrePremix-UL18_106X_upgrade2018_realistic_v11_L1v1-v2/PREMIX"
+             --conditions 106X_upgrade2018_realistic_v11_L1v1
              --customise_commands process.RandomNumberGeneratorService.externalLHEProducer.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.generator.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.VtxSmeared.initialSeed="int({int(random.random()*100000)})"\\\\n\
@@ -150,14 +150,14 @@ process.RandomNumberGeneratorService.simSiStripDigiSimLink.initialSeed="int({int
 process.RandomNumberGeneratorService.simMuonDTDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonCSCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonRPCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n \\
-             --step DIGIPREMIX_S2,DATAMIX,L1,DIGI2RAW,HLT:@frozen2016 --datamix PreMix --era Run2_2016 --no_exec --mc -n {nEvents} || exit $? ;
+             --step DIGIPREMIX_S2,DATAMIX,L1,DIGI2RAW,HLT:@frozen2016 --datamix PreMix --era Run2_2018 --no_exec --mc -n {nEvents} || exit $? ;
 cmsRun PREMIX_cfg.py || exit $? ;
 
 ### AOD step ###
 cmsDriver.py --python_filename AOD_cfg.py \\
              --eventcontent AODSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier AODSIM \\
              --filein file:PREMIX.root --fileout file:AOD.root \\
-             --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 \\
+             --conditions 106X_upgrade2018_realistic_v11_L1v1 \\
              --customise_commands process.RandomNumberGeneratorService.externalLHEProducer.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.generator.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.VtxSmeared.initialSeed="int({int(random.random()*100000)})"\\\\n\
@@ -170,25 +170,27 @@ process.RandomNumberGeneratorService.simSiStripDigiSimLink.initialSeed="int({int
 process.RandomNumberGeneratorService.simMuonDTDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonCSCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonRPCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n \\
-             --step RAW2DIGI,RECO,EI --era Run2_2016 --runUnscheduled --no_exec --mc -n {nEvents} || exit $? ;
+             --step RAW2DIGI,RECO,EI --era Run2_2018 --runUnscheduled --no_exec --mc -n {nEvents} || exit $? ;
 cmsRun AOD_cfg.py || exit $? ;
 
 ### MINIAOD step ####
-export SCRAM_ARCH=slc6_amd64_gcc630
+export SCRAM_ARCH=slc7_amd64_gcc700
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-if [ -r CMSSW_9_4_9/src ] ; then
-  echo release CMSSW_9_4_9 already exists
+if [ -r CMSSW_10_6_20/src ] ; then
+  echo release CMSSW_10_6_20 already exists
 else
-  scram p CMSSW CMSSW_9_4_9
+  scram p CMSSW CMSSW_10_6_20
 fi
-cd CMSSW_9_4_9/src
+cd CMSSW_10_6_20/src
 eval `scram runtime -sh`
+
 scram b
 cd ../..
+
 cmsDriver.py --python_filename MINIAOD_cfg.py \\
              --eventcontent MINIAODSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier MINIAODSIM \\
              --filein file:AOD.root --fileout file:MINIAOD.root \\
-             --conditions 94X_mcRun2_asymptotic_v3 \\
+             --conditions 106X_upgrade2018_realistic_v16_L1v1 
              --customise_commands process.RandomNumberGeneratorService.externalLHEProducer.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.generator.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.VtxSmeared.initialSeed="int({int(random.random()*100000)})"\\\\n\
@@ -201,25 +203,27 @@ process.RandomNumberGeneratorService.simSiStripDigiSimLink.initialSeed="int({int
 process.RandomNumberGeneratorService.simMuonDTDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonCSCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonRPCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n \\
-             --step PAT --era Run2_2016,run2_miniAOD_80XLegacy --runUnscheduled --no_exec --mc -n {nEvents} || exit $? ;
+             --step PAT --era Run2_2018,run2_miniAOD_106XLegacy --runUnscheduled --no_exec --mc -n {nEvents} || exit $? ;
 cmsRun MINIAOD_cfg.py || exit $? ;
 
 ### NANOAOD step ###
-export SCRAM_ARCH=slc6_amd64_gcc700
+export SCRAM_ARCH=slc7_amd64_gcc700
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-if [ -r CMSSW_10_2_22/src ] ; then
-  echo release CMSSW_10_2_22 already exists
+if [ -r CMSSW_10_6_26/src ] ; then
+  echo release CMSSW_10_6_26 already exists
 else
-  scram p CMSSW CMSSW_10_2_22
+  scram p CMSSW CMSSW_10_6_26
 fi
-cd CMSSW_10_2_22/src
+cd CMSSW_10_6_26/src
 eval `scram runtime -sh`
+
 scram b
 cd ../..
+
 cmsDriver.py --python_filename NANOAOD_cfg.py \\
              --eventcontent NANOAODSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier NANOAODSIM \\
              --filein file:MINIAOD.root --fileout file:NANOAOD.root \\
-             --conditions 102X_mcRun2_asymptotic_v8 \\
+             --conditions 106X_upgrade2018_realistic_v16_L1v1 
              --customise_commands process.RandomNumberGeneratorService.externalLHEProducer.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.generator.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.VtxSmeared.initialSeed="int({int(random.random()*100000)})"\\\\n\
@@ -232,7 +236,7 @@ process.RandomNumberGeneratorService.simSiStripDigiSimLink.initialSeed="int({int
 process.RandomNumberGeneratorService.simMuonDTDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonCSCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonRPCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n \\
-             --step NANO --era Run2_2016,run2_nanoAOD_94X2016 --no_exec --mc -n {nEvents} || exit $? ;
+             --step NANO --era Run2_2018,run2_nanoAOD_106Xv2 --no_exec --mc -n {nEvents} || exit $? ;
 cmsRun NANOAOD_cfg.py || exit $? ;
 
 ### Saving NANOAOD files ###
