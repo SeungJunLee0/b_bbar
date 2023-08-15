@@ -127,7 +127,7 @@ process.RandomNumberGeneratorService.simSiStripDigiSimLink.initialSeed="int({int
 process.RandomNumberGeneratorService.simMuonDTDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonCSCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.simMuonRPCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n \\
-             --step LHE,GEN,SIM --magField 38T_PostLS1 --no_exec --mc -n {nEvents} || exit $? ;
+             --step LHE,GEN,SIM --no_exec --mc -n {nEvents} || exit $? ;
 cmsRun GEN-SIM_cfg.py || exit $? ;
 
 ### PREMIX step ###
