@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 import os
 import sys
 import time
@@ -80,8 +81,8 @@ echo "Processing job number {job_id} ... "
 export X509_USER_PROXY={work_dir}/.voms_proxy
 export HOME=/afs/cern.ch/user/s/seungjun/private
 CWD=`pwd -P`
-mkdir -p /tmp/job_{job_id}
-cd /tmp/job_{job_id}
+mkdir -p /tmp/seungjun/job_{job_id}
+cd /tmp/seungjun/job_{job_id}
 
 ### GEN-SIM step ###
 
@@ -245,7 +246,7 @@ mv NANOAOD.root {output_dir}/{dataset_name}/NANOAOD_{job_id}.root
 
 ### Cleaning ###
 cd $CWD
-rm -rf /tmp/job_{job_id}
+rm -rf /tmp/seungjun/job_{job_id}
 echo "shell script has finished"
 
 # End of MC_Generation_Script_{job_id}.sh
