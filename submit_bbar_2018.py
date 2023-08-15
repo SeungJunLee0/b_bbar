@@ -19,6 +19,7 @@ def get_fragment(gridpack_path):
     
     fragment=''
     fragment+=f'''import FWCore.ParameterSet.Config as cms
+process=cms.Process("TEST")
 process.source = cms.Source("LHESource",
     fileNames = cms.untracked.vstring('file:/afs/cern.ch/user/s/seungjun/private/lhe_product/pwgevents-0001.lhe')
 )
