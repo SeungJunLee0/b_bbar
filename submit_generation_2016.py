@@ -18,6 +18,7 @@ def get_fragment(gridpack_path):
     
     fragment=''
     fragment+=f'''import FWCore.ParameterSet.Config as cms
+process=cms.Process("TEST")
 process.source = cms.Source("LHESource",
     fileNames = cms.untracked.vstring('file:/afs/cern.ch/user/s/seungjun/private/lhe_product/pwgevents-0001.lhe')
 )
@@ -179,8 +180,10 @@ else
 fi
 cd CMSSW_9_4_9/src
 eval `scram runtime -sh`
+
 scram b
 cd ../..
+
 cmsDriver.py --python_filename MINIAOD_cfg.py \\
              --eventcontent MINIAODSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier MINIAODSIM \\
              --filein file:AOD.root --fileout file:MINIAOD.root \\
@@ -346,8 +349,7 @@ def main():
         os.system(f"rm -rf {fragment_dir}/*")
     
     gridpack_dict = {
-    'tLepWLepZinvLO-madgraph-mcatnlo-pythia8':'/afs/cern.ch/user/s/seungjun/private/lhe_product/pwgevents-0001.lhe',
-    #'tLepWLepZinvLO-madgraph-mcatnlo-pythia8':'/nfs/dust/cms/user/stafford/tWZ_gen/slc6_gen_prod/genproductions/bin/MadGraph5_aMCatNLO/tLepWLepZinvLO_slc6_amd64_gcc700_CMSSW_10_2_24_patch1_tarball.tar.xz',
+    'tLepWLepZinvLO-madgraph-mcatnlo-pythia8':'/nfs/dust/cms/user/stafford/tWZ_gen/slc6_gen_prod/genproductions/bin/MadGraph5_aMCatNLO/tLepWLepZinvLO_slc6_amd64_gcc700_CMSSW_10_2_24_patch1_tarball.tar.xz',
     }
     job_id=0
     for dataset in gridpack_dict.keys():
@@ -375,4 +377,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-## how am i 
+
