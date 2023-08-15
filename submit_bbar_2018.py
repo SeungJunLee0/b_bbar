@@ -19,6 +19,13 @@ def get_fragment(gridpack_path):
     
     fragment=''
     fragment+=f'''import FWCore.ParameterSet.Config as cms
+externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
+    args = cms.vstring('/cvmfs/cms.cern.ch/phys_generator/gridpacks/2017/13TeV/powheg/V2/TT_hvq/TT_hdamp_NNPDF31_NNLO_dilepton.tgz'),
+    nEvents = cms.untracked.uint32(5000),
+    numberOfParameters = cms.uint32(1),
+    outputFile = cms.string('cmsgrid_final.lhe'),
+    scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh')
+)
 process=cms.Process("TEST")
 process.source = cms.Source("LHESource",
     fileNames = cms.untracked.vstring('file:/afs/cern.ch/user/s/seungjun/private/lhe_product/pwgevents-0001.lhe')
@@ -95,6 +102,7 @@ else
   scram p CMSSW CMSSW_10_6_17_patch1
 fi
 cd CMSSW_10_6_17_patch1/src
+eval 'cmsenv'
 eval `scram runtime -sh`
 
 [ ! -d Configuration/GenProduction/python ] && mkdir -p Configuration/GenProduction/python
@@ -107,7 +115,7 @@ cmsDriver.py Configuration/GenProduction/python/PY8_fragment.py --python_filenam
              --fileout file:GEN-SIM.root \\
              --conditions   106X_upgrade2018_realistic_v11_L1v1 --beamspot Realistic25ns13TeVEarly2018Collision \\
              --customise_commands process.source.numberEventsInLuminosityBlock="cms.untracked.uint32(100)"\\\\n\
-process.RandomNumberGeneratorService.externalLHEProducer.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.externalLHEProducer.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.generator.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.VtxSmeared.initialSeed="int({int(random.random()*100000)})"\\\\n\
 process.RandomNumberGeneratorService.LHCTransport.initialSeed="int({int(random.random()*100000)})"\\\\n\
