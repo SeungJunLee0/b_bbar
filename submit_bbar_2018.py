@@ -264,8 +264,8 @@ EndOfMCGenerationFile
 chmod +x MC_Generation_Script_{job_id}.sh
 
 # Run in SLC6 container
-#export SINGULARITY_CACHEDIR="/tmp/$(whoami)/singularity"
-#singularity run -B /afs -B /nfs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
+export SINGULARITY_CACHEDIR="/tmp/$(whoami)/singularity"
+singularity run -B /afs -B /nfs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
 '''
     
     return script
