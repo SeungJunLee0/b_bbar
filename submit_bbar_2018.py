@@ -42,20 +42,20 @@ generator = cms.EDFilter("Pythia8HadronizerFilter",
                               pythia8PowhegEmissionVetoSettingsBlock,
                               pythia8PSweightsSettingsBlock,
                               processParameters = cms.vstring(
-								          'POWHEG:nFinal = 2', ## Number of final state particles
-										          ## (BEFORE THE DECAYS) in the LHE
-										          ## other than emitted extra parton
-										          'TimeShower:mMaxGamma = 1.0',#cutting off lepton-pair production
-												          ##in the electromagnetic shower
-												          ##to not overlap with ttZ/gamma* samples
-												          '6:m0 = 172.5',    # top mass'
-														          ),
-							  parameterSets = cms.vstring('pythia8CommonSettings',
-								  'pythia8CP5Settings',
-								  'pythia8PowhegEmissionVetoSettings',
-								  'pythia8PSweightsSettings',
-								  'processParameters'
-								  )
+                                          'POWHEG:nFinal = 2', ## Number of final state particles
+                                          ## (BEFORE THE DECAYS) in the LHE
+                                          ## other than emitted extra parton
+                                          'TimeShower:mMaxGamma = 1.0',#cutting off lepton-pair production
+                                          ##in the electromagnetic shower
+                                          ##to not overlap with ttZ/gamma* samples
+                                          '6:m0 = 172.5',    # top mass'
+                                                  ),
+                              parameterSets = cms.vstring('pythia8CommonSettings',
+                                          'pythia8CP5Settings',
+                                          'pythia8PowhegEmissionVetoSettings',
+                                          'pythia8PSweightsSettings',
+                                          'processParameters'
+                                          )
 
 
                          )
@@ -257,8 +257,8 @@ EndOfMCGenerationFile
 chmod +x MC_Generation_Script_{job_id}.sh
 
 # Run in SLC6 container
-export SINGULARITY_CACHEDIR="/tmp/$(whoami)/singularity"
-singularity run -B /afs -B /nfs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
+#export SINGULARITY_CACHEDIR="/tmp/$(whoami)/singularity"
+#singularity run -B /afs -B /nfs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
 '''
     
     return script
