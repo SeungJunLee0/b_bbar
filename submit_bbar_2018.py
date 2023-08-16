@@ -20,7 +20,8 @@ def get_fragment(gridpack_path):
     fragment+=f'''import FWCore.ParameterSet.Config as cms
 externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
     args = cms.vstring('/cvmfs/cms.cern.ch/phys_generator/gridpacks/2017/13TeV/powheg/V2/TT_hvq/TT_hdamp_NNPDF31_NNLO_dilepton.tgz'),
-    nEvents = cms.untracked.uint32(5000),
+    nEvents = cms.untracked.uint32(10),
+    #nEvents = cms.untracked.uint32(5000),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
     scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh')
