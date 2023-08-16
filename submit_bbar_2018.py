@@ -265,8 +265,9 @@ chmod +x MC_Generation_Script_{job_id}.sh
 
 # Run in SLC6 container
 export SINGULARITY_CACHEDIR="/tmp/$(whoami)/singularity"
-singularity run -B /afs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
+#singularity run -B /afs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
 #singularity run -B /afs -B /nfs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
+
 '''
     
     return script
@@ -275,7 +276,8 @@ singularity run -B /afs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/
 def get_condor_submit_file(run_dir, nJobs):
 ####################################################################################
     
-    script_name = run_dir + "/mc_generation_job"
+    script_name = run_dir + "/MC_Generation_Script"
+    #script_name = run_dir + "/mc_generation_job"
     
     file=''
     file+=f'+RequestRuntime       = 85000\n'
