@@ -20,7 +20,7 @@ def get_fragment(gridpack_path):
     fragment+=f'''import FWCore.ParameterSet.Config as cms
 externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
     args = cms.vstring('/cvmfs/cms.cern.ch/phys_generator/gridpacks/2017/13TeV/powheg/V2/TT_hvq/TT_hdamp_NNPDF31_NNLO_dilepton.tgz'),
-    nEvents = cms.untracked.uint32(10),
+    nEvents = cms.untracked.uint32(0),
     #nEvents = cms.untracked.uint32(5000),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
@@ -96,49 +96,57 @@ cd /tmp/seungjun/job_{job_id}
 
 export SCRAM_ARCH=slc7_amd64_gcc700
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-if [ -r CMSSW_10_6_17_patch1/src ] ; then
-  echo release CMSSW_10_6_17_patch1 already exists
+if [ -r CMSSW_10_6_27/src ] ; then
+  echo release CMSSW_10_6_27 already exists
 else
-  scram p CMSSW CMSSW_10_6_17_patch1
+  scram p CMSSW CMSSW_10_6_27
 fi
-cd CMSSW_10_6_17_patch1/src
+cd CMSSW_10_6_27/src
 eval 'cmsenv'
 eval `scram runtime -sh`
 
-[ ! -d Configuration/GenProduction/python ] && mkdir -p Configuration/GenProduction/python
-cp {fragment_path} Configuration/GenProduction/python/PY8_fragment.py
-scram b
-cd ../..
+cmsDriver.py MCDBtoEDM --conditions 106X_upgrade2018_realistic_v11_L1v1 -s NONE \
+                                              --eventcontent RAWSIM --datatier GEN \
+                                              --filein file:/afs/cern.ch/user/s/seungjun/private/lhe_product/event4.lhe --no_exec -n {nEvents} || exit $? ;
+cmsRun MCDBtoEDM_NONE.py || exit $? ;
 
-cmsDriver.py Configuration/GenProduction/python/PY8_fragment.py --python_filename GEN-SIM_cfg.py \\
-             --eventcontent RAWSIM,LHE --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1,Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM,LHE \\
-             --fileout file:GEN-SIM.root \\
-             --conditions   106X_upgrade2018_realistic_v11_L1v1 --beamspot Realistic25ns13TeVEarly2018Collision \\
-             --customise_commands process.source.numberEventsInLuminosityBlock="cms.untracked.uint32(100)"\\\\n\
+
+
+
+#[ ! -d Configuration/GenProduction/python ] && mkdir -p Configuration/GenProduction/python
+#cp {fragment_path} Configuration/GenProduction/python/PY8_fragment.py
+#scram b
+#cd ../..
+#
+#cmsDriver.py Configuration/GenProduction/python/PY8_fragment.py --python_filename GEN-SIM_cfg.py \\
+#             --eventcontent RAWSIM,LHE --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1,Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM,LHE \\
+#             --fileout file:GEN-SIM.root \\
+#             --conditions   106X_upgrade2018_realistic_v11_L1v1 --beamspot Realistic25ns13TeVEarly2018Collision \\
+#             --customise_commands process.source.numberEventsInLuminosityBlock="cms.untracked.uint32(100)"\\\\n\
 #process.RandomNumberGeneratorService.externalLHEProducer.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.generator.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.VtxSmeared.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.LHCTransport.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.hiSignalLHCTransport.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.g4SimHits.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.mix.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.mixData.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.simSiStripDigiSimLink.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.simMuonDTDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.simMuonCSCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
-process.RandomNumberGeneratorService.simMuonRPCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n \\
-             --step LHE,GEN,SIM --no_exec --mc -n {nEvents} || exit $? ;
-cmsRun GEN-SIM_cfg.py || exit $? ;
+#process.RandomNumberGeneratorService.generator.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.VtxSmeared.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.LHCTransport.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.hiSignalLHCTransport.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.g4SimHits.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.mix.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.mixData.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.simSiStripDigiSimLink.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.simMuonDTDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.simMuonCSCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n\
+#process.RandomNumberGeneratorService.simMuonRPCDigis.initialSeed="int({int(random.random()*100000)})"\\\\n \\
+#             --step LHE,GEN,SIM --no_exec --mc -n {nEvents} || exit $? ;
+#cmsRun GEN-SIM_cfg.py || exit $? ;
 
 ### PREMIX step ###
 export SCRAM_ARCH=slc7_amd64_gcc700
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-if [ -r CMSSW_10_6_17_patch1/src ] ; then
-  echo release CMSSW_10_6_17_patch1 already exists
+if [ -r CMSSW_10_6_27/src ] ; then
+  echo release CMSSW_10_6_27 already exists
 else
-  scram p CMSSW CMSSW_10_6_17_patch1
+  scram p CMSSW CMSSW_10_6_27
 fi
-cd CMSSW_10_6_17_patch1/src
+cd CMSSW_10_6_27/src
 eval `scram runtime -sh`
 
 scram b
