@@ -8,10 +8,17 @@ import json
 import random
 from argparse import ArgumentParser
 
-work_dir = f"/afs/cern.ch/user/j/jipark/work/public/tmw/b_bbar/run"
+work_dir = f"/afs/cern.ch/user/s/seungjun/private/b_bbar/run"
 run_dir = f"{work_dir}/HTCondor_run"
-input_dir = f"/afs/cern.ch/user/j/jipark/work/public/tmw/b_bbar"
-output_dir = f"{work_dir}/out"
+input_dir = f"/afs/cern.ch/user/s/seungjun/private/b_bbar"
+output_dir = f"/afs/cern.ch/user/s/seungjun/private/b_bbar/out"
+
+
+
+#work_dir = f"/afs/cern.ch/user/j/jipark/work/public/tmw/b_bbar/run"
+#run_dir = f"{work_dir}/HTCondor_run"
+#input_dir = f"/afs/cern.ch/user/j/jipark/work/public/tmw/b_bbar"
+#output_dir = f"{work_dir}/out"
 
 ####################################################################################
 def get_fragment():
@@ -75,8 +82,8 @@ cat <<'EndOfMCGenerationFile' > MC_Generation_Script_{job_id}.sh
 echo "Processing job number {job_id} ... "
 export X509_USER_PROXY={work_dir}/.voms_proxy
 CWD=`pwd -P`
-mkdir -p /tmp/jipark/job_{job_id}
-cd /tmp/jipark/job_{job_id}
+mkdir -p /tmp/seungjun/job_{job_id}
+cd /tmp/seungjun/job_{job_id}
 
 ### GEN-SIM step ###
 
@@ -180,7 +187,7 @@ mv NANOAOD.root {output_dir}/{dataset_name}/NANOAOD_{job_id}.root
 
 ### Cleaning ###
 cd $CWD
-rm -rf /tmp/jipark/job_{job_id}
+rm -rf /tmp/seungjun/job_{job_id}
 echo "shell script has finished"
 
 # End of MC_Generation_Script_{job_id}.sh
