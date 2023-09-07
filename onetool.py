@@ -13,4 +13,4 @@ for file_name in all_file:
     output = " /u/user/seungjun/SE_UserHome/root/"+width+"/lhe_"+file_new+".root "
     command_line="cmsRun lhe_to_edm.py "+file_name+" /u/user/seungjun/SE_UserHome/root/"+width+"/lhe_"+file_new+".root "
     print(command_line)
-    os.system(command_line)
+    #os.system(command_line)
