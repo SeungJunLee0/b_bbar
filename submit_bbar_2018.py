@@ -11,9 +11,9 @@ from argparse import ArgumentParser
 work_dir = f"/u/user/seungjun/scratch/b_bbar/run"
 run_dir = f"{work_dir}/HTCondor_run"
 #input_dir = f"/u/user/seungjun/scratch/b_bbar"
-input_dir = f"/u/user/seungjun/SE_UserHome/root/0_90em/"
+input_dir = f"/u/user/seungjun/SE_UserHome/root/0_90em"
 #output_dir = f"/u/user/seungjun/scratch/b_bbar/out"
-output_dir = f"/u/user/seungjun/SE_UserHome/AOD/0_90em/"
+output_dir = f"/u/user/seungjun/SE_UserHome/AOD/0_90em"
 
 
 
@@ -80,8 +80,8 @@ cat <<'EndOfMCGenerationFile' > MC_Generation_Script_{job_id}.sh
 echo "Processing job number {job_id} ... "
 export X509_USER_PROXY={work_dir}/.voms_proxy
 CWD=`pwd -P`
-mkdir -p /tmp/seungjun/job_{job_id}
-cd /tmp/seungjun/job_{job_id}
+mkdir -p /u/user/seungjun/scratch/job_{job_id}
+cd /u/user/seungjun/scratch/job_{job_id}
 
 ### GEN-SIM step ###
 
@@ -185,7 +185,7 @@ mv NANOAOD.root {output_dir}/{dataset_name}/NANOAOD_{job_id}.root
 
 ### Cleaning ###
 cd $CWD
-rm -rf /tmp/seungjun/job_{job_id}
+rm -rf /u/user/seungjun/scratch/job_{job_id}
 echo "shell script has finished"
 
 # End of MC_Generation_Script_{job_id}.sh
@@ -195,7 +195,7 @@ EndOfMCGenerationFile
 chmod +x MC_Generation_Script_{job_id}.sh
 
 # Run in SLC6 container
-export SINGULARITY_CACHEDIR="/tmp/$(whoami)/singularity"
+#export SINGULARITY_CACHEDIR="/u/user/seungjun/scratch/$(whoami)/singularity"
 #singularity run -B /afs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
 #singularity run -B /afs -B /nfs -B /cvmfs -B /etc/grid-security --home $PWD:$PWD /cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/slc6:amd64 $(echo $(pwd)/MC_Generation_Script_{job_id}.sh)
 
@@ -212,7 +212,7 @@ def get_condor_submit_file(run_dir, nJobs):
     
     file=''
     file+=f'+RequestRuntime       = 85000\n'
-    file+=f'RequestMemory         = 2000\n'
+    file+=f'RequestMemory         = 4 GB\n'
     file+=f'universe              = vanilla\n'
     file+=f'executable            = {script_name}_$(ProcId).sh\n'
     file+=f'output                = {script_name}_$(ProcId).out\n'
