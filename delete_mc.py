@@ -13,7 +13,6 @@ int_num = []
 
 for file_name in all_file:
     file_new = file_name[-8:-5].replace(" ","")
-    #print(file_new)
     int_num.append(int(file_new))
 int_num.sort()
 #print(int_num)
