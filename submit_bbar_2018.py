@@ -8,17 +8,15 @@ import json
 import random
 from argparse import ArgumentParser
 
-work_dir = f"/afs/cern.ch/user/s/seungjun/private/b_bbar/run"
+work_dir = f"/u/user/seungjun/scratch/b_bbar/run"
 run_dir = f"{work_dir}/HTCondor_run"
-input_dir = f"/afs/cern.ch/user/s/seungjun/private/b_bbar"
-output_dir = f"/afs/cern.ch/user/s/seungjun/private/b_bbar/out"
+#input_dir = f"/u/user/seungjun/scratch/b_bbar"
+input_dir = f"/u/user/seungjun/SE_UserHome/root/0_90em/"
+#output_dir = f"/u/user/seungjun/scratch/b_bbar/out"
+output_dir = f"/u/user/seungjun/SE_UserHome/AOD/0_90em/"
 
 
 
-#work_dir = f"/afs/cern.ch/user/j/jipark/work/public/tmw/b_bbar/run"
-#run_dir = f"{work_dir}/HTCondor_run"
-#input_dir = f"/afs/cern.ch/user/j/jipark/work/public/tmw/b_bbar"
-#output_dir = f"{work_dir}/out"
 
 ####################################################################################
 def get_fragment():
