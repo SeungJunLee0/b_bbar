@@ -8,12 +8,19 @@ import json
 import random
 from argparse import ArgumentParser
 
-work_dir = f"/u/user/seungjun/scratch/b_bbar/run_170"
+width_title = ["0_80em","0_90em","1_00em","1_10em","1_20em","1_30em", "1_32em", "1_40em", "1_50em","1_60em","1_70em","1_80em"]
+#                 0        1        2         3       4       5         6        7         8          9        10        11
+width_dir = [   "0_80"  , "0_90",  "1_00",  "1_10",  "1_20"  ,"1_30",  "1_32",   "1_40"  , "1_50",   "1_60",  "1_70", "1_80"]
+width_value = 0
+dir_name = width_title[width_value]
+
+
+work_dir = f"/u/user/seungjun/scratch/b_bbar/run"+dir_name
 run_dir = f"{work_dir}/HTCondor_run"
 #input_dir = f"/u/user/seungjun/scratch/b_bbar"
-input_dir = f"/u/user/seungjun/SE_UserHome/root/1_70em"
+input_dir = f"/u/user/seungjun/SE_UserHome/root/"+dir_name
 #output_dir = f"/u/user/seungjun/scratch/b_bbar/out"
-output_dir = f"/u/user/seungjun/SE_UserHome/AOD/1_70em"
+output_dir = f"/u/user/seungjun/SE_UserHome/AOD/"+dir_name
 
 
 
@@ -219,6 +226,9 @@ def get_condor_submit_file(run_dir, nJobs):
     file+=f'log                   = {script_name}_$(ProcId).log\n'
     file+=f'transfer_executable   = True\n'
     file+=f'queue {nJobs}\n'
+    file+=f'#\n'
+    file+=f'notify_user = seungjunlee15@gmail.com\n'
+    file+=f'notification = always\n'
     
     return file
 
