@@ -10,33 +10,6 @@ print(width)
 
 
 
-all_folder = glob.glob('/u/user/seungjun/SE_UserHome/root/'+width+'/*.root')
-all_file = [x for x in all_folder if os.path.isfile(x)]
-
-int_num = []
-
-for file_name in all_file:
-    file_new = file_name[-8:-5].replace(" ","")
-    int_num.append(int(file_new))
-int_num.sort()
-#print(int_num)
-
-
-int_no = []
-for i in range(0,161):
-    if i not in int_num:
-        int_no.append(i)
-        #print(i)
-print(int_no)
-
-
-
-for i in int_no:
-    num = str(i)
-    command_line = "rm -rf /u/user/seungjun/scratch/b_bbar/run/HTCondor_run/mc_generation_job_"+num+".sh"
-    #print(command_line)
-    os.system(command_line)
-
 
 all_folder = glob.glob('/u/user/seungjun/scratch/b_bbar/run/HTCondor_run/mc*.sh')
 all_file = [x for x in all_folder if os.path.isfile(x)]
