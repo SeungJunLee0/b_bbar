@@ -8,12 +8,12 @@ import json
 import random
 from argparse import ArgumentParser
 
-work_dir = f"/u/user/seungjun/scratch/b_bbar/run"
+work_dir = f"/u/user/seungjun/scratch/b_bbar/run_170"
 run_dir = f"{work_dir}/HTCondor_run"
 #input_dir = f"/u/user/seungjun/scratch/b_bbar"
-input_dir = f"/u/user/seungjun/SE_UserHome/root/0_90em"
+input_dir = f"/u/user/seungjun/SE_UserHome/root/1_70em"
 #output_dir = f"/u/user/seungjun/scratch/b_bbar/out"
-output_dir = f"/u/user/seungjun/SE_UserHome/AOD/0_90em"
+output_dir = f"/u/user/seungjun/SE_UserHome/AOD/1_70em"
 
 
 
@@ -80,8 +80,8 @@ cat <<'EndOfMCGenerationFile' > MC_Generation_Script_{job_id}.sh
 echo "Processing job number {job_id} ... "
 export X509_USER_PROXY={work_dir}/.voms_proxy
 CWD=`pwd -P`
-mkdir -p /u/user/seungjun/scratch/job_{job_id}
-cd /u/user/seungjun/scratch/job_{job_id}
+mkdir -p /u/user/seungjun/scratch/em170/job_{job_id}
+cd /u/user/seungjun/scratch/em170/job_{job_id}
 
 ### GEN-SIM step ###
 
@@ -185,7 +185,7 @@ mv NANOAOD.root {output_dir}/{dataset_name}/NANOAOD_{job_id}.root
 
 ### Cleaning ###
 cd $CWD
-rm -rf /u/user/seungjun/scratch/job_{job_id}
+rm -rf /u/user/seungjun/scratch/em170/job_{job_id}
 echo "shell script has finished"
 
 # End of MC_Generation_Script_{job_id}.sh
@@ -211,7 +211,6 @@ def get_condor_submit_file(run_dir, nJobs):
     #script_name = run_dir + "/mc_generation_job"
     
     file=''
-    file+=f'+RequestRuntime       = 85000\n'
     file+=f'RequestMemory         = 4 GB\n'
     file+=f'universe              = vanilla\n'
     file+=f'executable            = {script_name}_$(ProcId).sh\n'
