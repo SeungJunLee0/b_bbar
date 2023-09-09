@@ -11,7 +11,7 @@ from argparse import ArgumentParser
 width_title = ["0_80em","0_90em","1_00em","1_10em","1_20em","1_30em", "1_32em", "1_40em", "1_50em","1_60em","1_70em","1_80em"]
 #                 0        1        2         3       4       5         6        7         8          9        10        11
 width_dir = [   "0_80"  , "0_90",  "1_00",  "1_10",  "1_20"  ,"1_30",  "1_32",   "1_40"  , "1_50",   "1_60",  "1_70", "1_80"]
-width_value = 0
+width_value = 10
 dir_name = width_title[width_value]
 
 
@@ -71,7 +71,7 @@ ProductionFilterSequence = cms.Sequence(generator)'''
     return fragment
 
 ####################################################################################
-def get_shell_script(dataset_name, nEvents, fragment_path, job_id):
+def get_shell_script(dataset_name, nEvents, fragment_path, job_id, dir_name):
 ####################################################################################
     
     script=''
@@ -87,8 +87,8 @@ cat <<'EndOfMCGenerationFile' > MC_Generation_Script_{job_id}.sh
 echo "Processing job number {job_id} ... "
 export X509_USER_PROXY={work_dir}/.voms_proxy
 CWD=`pwd -P`
-mkdir -p /u/user/seungjun/scratch/em170/job_{job_id}
-cd /u/user/seungjun/scratch/em170/job_{job_id}
+mkdir -p /u/user/seungjun/scratch/{dir_name}/job_{job_id}
+cd /u/user/seungjun/scratch/{dir_name}/job_{job_id}
 
 ### GEN-SIM step ###
 
@@ -192,7 +192,7 @@ mv NANOAOD.root {output_dir}/{dataset_name}/NANOAOD_{job_id}.root
 
 ### Cleaning ###
 cd $CWD
-rm -rf /u/user/seungjun/scratch/em170/job_{job_id}
+rm -rf /u/user/seungjun/scratch/{dir_name}/job_{job_id}
 echo "shell script has finished"
 
 # End of MC_Generation_Script_{job_id}.sh
@@ -292,8 +292,14 @@ def main():
     parser.add_argument("--nEvent", type=int, default=-1, required=False, help="number of events per job (nTot_dataset = nEvent x nJob)")
     args = parser.parse_args()
     
+    if(not os.path.exists(work_dir)):
+        os.system(f"mkdir {work_dir}")
+    else:
+        os.system(f"rm -rf {work_dir}/*")
+
     os.system(f"voms-proxy-init --voms cms -valid 192:00 --out {work_dir}/.voms_proxy")
-    
+
+
     if(not os.path.exists(run_dir)):
         os.system(f"mkdir {run_dir}")
     else:
@@ -304,7 +310,8 @@ def main():
         os.system(f"mkdir {fragment_dir}")
     else:
         os.system(f"rm -rf {fragment_dir}/*")
-    
+
+
     gridpack_dict = {
         #'bb4l_nominal':'/afs/cern.ch/user/s/seungjun/private/lhe_product/pwgevents-0001.lhe',
         'bb4l_nominal':'pwgevents-0001.lhe',
@@ -318,7 +325,7 @@ def main():
         for iJob in range(args.nJob):
             
             with open(f'{run_dir}/mc_generation_job_{str(job_id)}.sh','w') as bash_file:
-                bash_file.write(get_shell_script(dataset, args.nEvent , f'{fragment_dir}/{dataset}.py', job_id))
+                bash_file.write(get_shell_script(dataset, args.nEvent , f'{fragment_dir}/{dataset}.py', job_id,dir_name))
             
             job_id+=1
     
