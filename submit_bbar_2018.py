@@ -149,7 +149,7 @@ cmsDriver.py Configuration/GenProduction/python/PY8_fragment.py --python_filenam
              --fileout file:GEN-SIM.root \\
              --filein file:{input_dir}/lhe_{job_id}.root \\
              --conditions 106X_upgrade2018_realistic_v11_L1v1 --beamspot Realistic25ns13TeVEarly2018Collision \\
-             --customise_commands process.RandomNumberGeneratorService.g4SimHits.initialSeed="int({int(random.random()*100000)})"\\\\n \\ 
+             --customise_commands process.RandomNumberGeneratorService.g4SimHits.initialSeed="int({int(random.random()*100000)})"\\ 
              --geometry DB:Extended --era Run2_2018 \\
              --step GEN,SIM --no_exec --mc -n {nEvents} || exit $? ;
 cmsRun GEN-SIM_cfg.py || exit $? ;
